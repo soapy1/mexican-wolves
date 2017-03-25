@@ -1,5 +1,5 @@
 from allele import Allele
-from math import pow
+from math import pow, floor
 from random import randrange, normalvariate
 
 class Wolf(object):
@@ -10,7 +10,7 @@ class Wolf(object):
         self.alleles = alleles
         self.age = 0
         # Average life span is 6-8 years [5]
-        self.lifespan = normalvariate(7, 1) 
+        self.lifespan = floor(normalvariate(7, 1)) 
 
     def genetic_variability(self):
         return pow(sum(
