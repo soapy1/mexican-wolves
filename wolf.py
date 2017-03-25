@@ -1,5 +1,6 @@
 from allele import Allele
 from math import pow
+from random import randrange
 
 class Wolf(object):
     def __init__(self, alleles):
@@ -13,4 +14,8 @@ class Wolf(object):
             pow(self.alleles[i].allele,2) for i in 
             range(0, len(self.alleles))), 0.5
         )
-    
+   
+def generate_random_wolf():
+    alleles = [Allele(randrange(1,5)) for i in range(0,5)]
+    return Wolf(alleles)
+ 

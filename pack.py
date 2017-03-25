@@ -1,8 +1,7 @@
 from allele import Allele
-from wolf import Wolf
+from wolf import Wolf, generate_random_wolf
 from random import normalvariate
 from math import floor
-from wolf_utils import generate_random_wolf
 
 class Pack(object):
     def __init__(self, wolves):
@@ -17,4 +16,7 @@ class Pack(object):
         # - The alleles of the pups will be related the parents
         num_pups = floor(normalvariate(7.5, 2))
         self.wolves.extend(generate_random_wolf() for i in range(0,num_pups))
+
+def generate_pack(num_wolves):
+    return Pack([generate_random_wolf() for i in range(0,num_wolves)])
 
