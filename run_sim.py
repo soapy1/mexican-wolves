@@ -1,7 +1,7 @@
-import wolf_utils
+from pack import Pack, generate_pack
 
 def main():
-    print("Sgdf")
+    pack = generate_pack(4)
 
 if __name__=='__main__':
     main()
