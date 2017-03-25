@@ -1,6 +1,6 @@
 from allele import Allele
 from math import pow
-from random import randrange
+from random import randrange, normalvariate
 
 class Wolf(object):
     def __init__(self, alleles):
@@ -8,6 +8,9 @@ class Wolf(object):
         if len(alleles) > 5:
             raise ValueError("Too many alleles specified")
         self.alleles = alleles
+        self.age = 0
+        # Average life span is 6-8 years [5]
+        self.lifespan = normalvariate(7, 1) 
 
     def genetic_variability(self):
         return pow(sum(
