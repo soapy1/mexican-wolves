@@ -3,7 +3,7 @@ from math import pow, floor
 from random import randrange, normalvariate
 
 class Wolf(object):
-    def __init__(self, alleles):
+    def __init__(self, alleles, can_mate=False):
         # A wolf should have 5 alleles [1]
         if len(alleles) > 5:
             raise ValueError("Too many alleles specified")
@@ -11,6 +11,7 @@ class Wolf(object):
         self.age = 0
         # Average life span is 6-8 years [5]
         self.lifespan = floor(normalvariate(7, 1)) 
+        self.can_mate = can_mate
 
     # Note: max variance is 2
     def genetic_variance(self):
@@ -22,7 +23,7 @@ class Wolf(object):
         return var
 
  
-def generate_random_wolf():
+def generate_random_wolf(can_mate=False):
     alleles = [Allele(randrange(1,5)) for i in range(0,5)]
-    return Wolf(alleles)
+    return Wolf(alleles, can_mate)
 

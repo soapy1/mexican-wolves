@@ -1,5 +1,6 @@
-from wolf import generate_random_wolf
-from random import normalvariate
+from wolf import Wolf, generate_random_wolf
+from allele import Allele
+from random import normalvariate, randrange
 from math import floor
 
 class Pack(object):
@@ -15,14 +16,22 @@ class Pack(object):
     # standard deviation is arbitarily chosen. A genetically depressed set
     # of a parents may have a litter size as small as 3.40 - 6.71  on average
     def mate(self):
-        # TODO:
-        # - The alleles of the pups will be related the parents
         if len(self.wolves) >= 2:
             if self.average_genetic_variance() > 1:            
                 num_pups = floor(normalvariate(7.45, 2))
             else:
                 num_pups = floor(normalvariate(3.40, 2))
-            self.wolves.extend(generate_random_wolf() for i in range(0,num_pups))
+            self.wolves.extend(Wolf(self.determine_pup_alleles()) for i in range(0,num_pups))
+
+    def determine_pup_alleles(self):
+        mating_wolves = [w for w in self.wolves if w.can_mate==True]
+        pup_alleles = []
+        assert len(mating_wolves[0].alleles) == len(mating_wolves[1].alleles)
+        assert len(mating_wolves) == 2
+        for i in range(0,len(mating_wolves[0].alleles)):
+            pup_alleles.append(mating_wolves[0].alleles[i] if \
+                randrange(0,2)==0 else mating_wolves[1].alleles[i])
+        return pup_alleles
 
     # Accounting for death by old age, lack or resources, killed by
     # other animal, etc. This is all encapsulated by the life span of
@@ -34,6 +43,11 @@ class Pack(object):
                 wolves_to_die.append(w)  
         for d in wolves_to_die:
             self.wolves.remove(d)
+        mating_wolves = [w for w in self.wolves if w.can_mate==True]
+        if len(mating_wolves) < 1:
+            self.wolves[0].can_mate = True
+        if len(mating_wolves) < 2:
+            self.wolves[1].can_mate = True
 
     def average_genetic_variance(self):
         num_wolves = len(self.wolves)
@@ -41,5 +55,6 @@ class Pack(object):
 
 
 def generate_pack(num_wolves):
-    return Pack([generate_random_wolf() for i in range(0,num_wolves)])
-
+    wolves = [generate_random_wolf() for i in range(0,num_wolves-2)]
+    wolves.extend([generate_random_wolf(True) for i in range(0,2)])
+    return Pack(wolves)
