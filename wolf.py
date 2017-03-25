@@ -12,13 +12,17 @@ class Wolf(object):
         # Average life span is 6-8 years [5]
         self.lifespan = floor(normalvariate(7, 1)) 
 
-    def genetic_variability(self):
-        return pow(sum(
-            pow(self.alleles[i].allele,2) for i in 
-            range(0, len(self.alleles))), 0.5
-        )
-   
+    # Note: max variance is 2
+    def genetic_variance(self):
+        num_alleles = len(self.alleles)
+        mean = sum(self.alleles[i].allele for i in 
+            range(0, num_alleles))/num_alleles
+        var = sum(pow(self.alleles[i].allele-mean,2) for i in
+            range(0, num_alleles))/num_alleles
+        return var
+
+ 
 def generate_random_wolf():
     alleles = [Allele(randrange(1,5)) for i in range(0,5)]
     return Wolf(alleles)
- 
+

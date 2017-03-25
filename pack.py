@@ -16,10 +16,12 @@ class Pack(object):
     # of a parents may have a litter size as small as 3.40 - 6.71  on average
     def mate(self):
         # TODO:
-        # - The success of mating is related to inbreeding [2,3]
         # - The alleles of the pups will be related the parents
         if len(self.wolves) >= 2:
-            num_pups = floor(normalvariate(7.45, 2))
+            if self.average_genetic_variance() > 1:            
+                num_pups = floor(normalvariate(7.45, 2))
+            else:
+                num_pups = floor(normalvariate(3.40, 2))
             self.wolves.extend(generate_random_wolf() for i in range(0,num_pups))
 
     # Accounting for death by old age, lack or resources, killed by
@@ -32,6 +34,11 @@ class Pack(object):
                 wolves_to_die.append(w)  
         for d in wolves_to_die:
             self.wolves.remove(d)
+
+    def average_genetic_variance(self):
+        num_wolves = len(self.wolves)
+        return sum(self.wolves[i].genetic_variance() for i in range(0,num_wolves))/num_wolves
+
 
 def generate_pack(num_wolves):
     return Pack([generate_random_wolf() for i in range(0,num_wolves)])

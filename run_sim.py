@@ -15,6 +15,9 @@ def main():
             p.mate()
             p.deaths()
 
+    print("pack sizes: ", [len(p.wolves) for p in packs])
+    print("genetic variances: ", [p.average_genetic_variance() for p in packs])
+
 
 def ages_lsp(p):
     alsp = [{'age': p.wolves[i].age, 'lsp': p.wolves[i].lifespan} for i in range(0,len(p.wolves))] 
