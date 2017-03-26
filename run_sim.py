@@ -1,6 +1,7 @@
 from pack import Pack, generate_pack
 from random import normalvariate
 from math import ceil
+import matplotlib.pyplot as plt
 
 def main():
     # start simulation at year 0
@@ -36,13 +37,30 @@ def main():
                 'avg_genetic_var':wolf_pop_genetic_variance(packs)}
         })
 
-#    print("pack sizes: ", [len(p.wolves) for p in packs])
-#    print("genetic variances: ", [p.average_genetic_variance() for p in packs])
-    print(time_data)
     print("number packs: ", len(packs))
     print("wolf population: ", wolf_population(packs))
     print("average variance: ", wolf_pop_genetic_variance(packs))
+    years = [d['year'] for d in time_data]
+    num_packs = [d['stats']['num_packs'] for d in time_data]
+    wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
+    avg_genetic_var = [d['stats']['avg_genetic_var'] for d in time_data]
 
+    plt.figure(1)
+    plt.plot(years, num_packs, 'ro')
+    plt.ylabel('num packs')
+    plt.xlabel('years')
+
+    plt.figure(2)
+    plt.plot(years, wolf_pop, 'ro')
+    plt.ylabel('wolf population')
+    plt.xlabel('years')
+
+    plt.figure(3)
+    plt.plot(years, avg_genetic_var, 'ro')
+    plt.ylabel('average genetic variation')
+    plt.xlabel('years')
+
+    plt.show()
 
 def split_pack(p):
     len_new_pack = ceil(len(p.wolves)/2)
