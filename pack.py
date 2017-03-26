@@ -43,11 +43,18 @@ class Pack(object):
                 wolves_to_die.append(w)  
         for d in wolves_to_die:
             self.wolves.remove(d)
-        mating_wolves = [w for w in self.wolves if w.can_mate==True]
+        self.ensure_two_mating_wolves()
+
+    def ensure_two_mating_wolves(self):
+        mating_wolves = [w for w in self.wolves if w.can_mate == True]
+        non_mating_wolves = [w for w in self.wolves if w.can_mate==False]
+        if len(mating_wolves) >= 3:
+            for i in range(0,len(mating_wolves)-2):
+                mating_wolves[i].can_mate = False
         if len(mating_wolves) < 1:
-            self.wolves[0].can_mate = True
+            non_mating_wolves[1].can_mate = True
         if len(mating_wolves) < 2:
-            self.wolves[1].can_mate = True
+            non_mating_wolves[0].can_mate = True
 
     def average_genetic_variance(self):
         num_wolves = len(self.wolves)
