@@ -17,7 +17,7 @@ class Pack(object):
     # of a parents may have a litter size as small as 3.40 - 6.71  on average
     def mate(self):
         if len(self.wolves) >= 2:
-            if self.average_genetic_variance() > 1:            
+            if self.average_genetic_variance() > 1.5:            
                 num_pups = floor(normalvariate(7.45, 2))
             else:
                 num_pups = floor(normalvariate(3.40, 2))
@@ -26,8 +26,8 @@ class Pack(object):
     def determine_pup_alleles(self):
         mating_wolves = [w for w in self.wolves if w.can_mate==True]
         pup_alleles = []
-        assert len(mating_wolves[0].alleles) == len(mating_wolves[1].alleles)
         assert len(mating_wolves) == 2
+        assert len(mating_wolves[0].alleles) == len(mating_wolves[1].alleles)
         for i in range(0,len(mating_wolves[0].alleles)):
             pup_alleles.append(mating_wolves[0].alleles[i] if \
                 randrange(0,2)==0 else mating_wolves[1].alleles[i])
@@ -46,15 +46,18 @@ class Pack(object):
         self.ensure_two_mating_wolves()
 
     def ensure_two_mating_wolves(self):
+        if len(self.wolves) < 2:
+            return
         mating_wolves = [w for w in self.wolves if w.can_mate == True]
         non_mating_wolves = [w for w in self.wolves if w.can_mate==False]
         if len(mating_wolves) >= 3:
             for i in range(0,len(mating_wolves)-2):
                 mating_wolves[i].can_mate = False
-        if len(mating_wolves) < 1:
-            non_mating_wolves[1].can_mate = True
-        if len(mating_wolves) < 2:
+        if len(mating_wolves) == 1:
             non_mating_wolves[0].can_mate = True
+        if len(mating_wolves) == 0:
+            non_mating_wolves[0].can_mate = True
+            non_mating_wolves[1].can_mate = True
 
     def average_genetic_variance(self):
         num_wolves = len(self.wolves)
