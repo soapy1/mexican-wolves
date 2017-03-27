@@ -1,5 +1,5 @@
 from allele import Allele
-from math import pow, floor
+from math import pow, floor, sqrt
 from random import randrange, normalvariate
 
 class Wolf(object):
@@ -22,6 +22,9 @@ class Wolf(object):
             range(0, num_alleles))/num_alleles
         return var
 
+
+    def genetic_std_dev(self):
+        return sqrt(self.genetic_variance())
  
 def generate_random_wolf(can_mate=False):
     alleles = [Allele(randrange(1,5)) for i in range(0,5)]

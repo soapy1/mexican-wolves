@@ -63,6 +63,10 @@ class Pack(object):
         num_wolves = len(self.wolves)
         return sum(self.wolves[i].genetic_variance() for i in range(0,num_wolves))/num_wolves
 
+    def average_genetic_std_dev(self):
+        num_wolves = len(self.wolves)
+        return sum(self.wolves[i].genetic_std_dev() for i in range(0,num_wolves))/num_wolves
+
 
 def generate_pack(num_wolves):
     wolves = [generate_random_wolf() for i in range(0,num_wolves-2)]

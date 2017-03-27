@@ -3,11 +3,14 @@ from random import normalvariate
 from math import ceil
 import matplotlib.pyplot as plt
 
+
 def main():
+    run_sim(100, 500)
+
+
+def run_sim(max_years, max_population):
     # start simulation at year 0
-    max_years = 15
     year = 0
-    max_population = 150
     # Pack sizes for gray wolves range from about 2 to 8 members [4]
     packs = [generate_pack(ceil(normalvariate(5,3))) for i in range(0,3)]
     time_data = [{
@@ -15,7 +18,8 @@ def main():
         'stats':{
             'num_packs':len(packs),
             'wolf_pop':wolf_population(packs),
-            'avg_genetic_var':wolf_pop_genetic_variance(packs)}
+            'avg_genetic_var':wolf_pop_genetic_variance(packs),
+            'avg_genetic_std_dev':wolf_pop_genetic_std_dev(packs)}
         }]
     for i in range(0,max_years):
         year += 1;
@@ -35,16 +39,19 @@ def main():
             'stats':{
                 'num_packs':len(packs),
                 'wolf_pop':wolf_population(packs),
-                'avg_genetic_var':wolf_pop_genetic_variance(packs)}
+                'avg_genetic_var':wolf_pop_genetic_variance(packs),
+                'avg_genetic_std_dev':wolf_pop_genetic_std_dev(packs)}
         })
 
     print("number packs: ", len(packs))
     print("wolf population: ", wolf_population(packs))
     print("average variance: ", wolf_pop_genetic_variance(packs))
+    print("average std dev: ", wolf_pop_genetic_std_dev(packs))
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
     avg_genetic_var = [d['stats']['avg_genetic_var'] for d in time_data]
+    avg_genetic_std_dev = [d['stats']['avg_genetic_std_dev'] for d in time_data]
 
     plt.figure(1)
     plt.plot(years, num_packs, 'ro')
@@ -61,7 +68,14 @@ def main():
     plt.ylabel('average genetic variation')
     plt.xlabel('years')
 
+#    plt.figure(4)
+#    plt.plot(years, avg_genetic_std_dev, 'ro')
+#    plt.ylabel('average genetic standard deviation')
+#    plt.xlabel('years')
+
     plt.show()
+    return time_data
+    
 
 def split_pack(p):
     len_new_pack = ceil(len(p.wolves)/2)
@@ -77,6 +91,10 @@ def wolf_population(packs):
 
 def wolf_pop_genetic_variance(packs):
     return sum(p.average_genetic_variance() for p in packs)/len(packs)
+
+
+def wolf_pop_genetic_std_dev(packs):
+    return sum(p.average_genetic_std_dev() for p in packs)/len(packs)
 
 
 def ages_lsp(p):
