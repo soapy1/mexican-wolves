@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 def main():
     # start simulation at year 0
+    max_years = 15
     year = 0
     max_population = 150
     # Pack sizes for gray wolves range from about 2 to 8 members [4]
@@ -16,7 +17,7 @@ def main():
             'wolf_pop':wolf_population(packs),
             'avg_genetic_var':wolf_pop_genetic_variance(packs)}
         }]
-    for i in range(0,15):
+    for i in range(0,max_years):
         year += 1;
         next_iter_packs = []
         for p in packs:
