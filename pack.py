@@ -2,6 +2,7 @@ from wolf import Wolf, generate_random_wolf
 from allele import Allele
 from random import normalvariate, randrange
 from math import floor
+import statistics
 
 class Pack(object):
     def __init__(self, wolves):
@@ -66,6 +67,21 @@ class Pack(object):
     def average_genetic_std_dev(self):
         num_wolves = len(self.wolves)
         return sum(self.wolves[i].genetic_std_dev() for i in range(0,num_wolves))/num_wolves
+
+    def histogram_of_allele_variance(self):
+        alleles = {"a":0, "b":0, "c":0, "d":0, "e":0} 
+        num_wolves = len(self.wolves)
+        alleles['a'] = statistics.pvariance(
+            [self.wolves[i].alleles[0].allele for i in range(0, num_wolves)])
+        alleles['b'] = statistics.pvariance(
+            [self.wolves[i].alleles[1].allele for i in range(0, num_wolves)])
+        alleles['c'] = statistics.pvariance(
+            [self.wolves[i].alleles[2].allele for i in range(0, num_wolves)])
+        alleles['d'] = statistics.pvariance(
+            [self.wolves[i].alleles[3].allele for i in range(0, num_wolves)])
+        alleles['e'] = statistics.pvariance(
+            [self.wolves[i].alleles[4].allele for i in range(0, num_wolves)])
+        return alleles
 
 
 def generate_pack(num_wolves):
