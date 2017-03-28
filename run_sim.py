@@ -71,7 +71,8 @@ def run_sim(max_years, max_population, packs=None):
         'packs':packs,
         'stats':{
             'num_packs':len(packs),
-            'wolf_pop':wolf_population(packs)}
+            'wolf_pop':wolf_population(packs),
+            'mean_var':average_genetic_variance_total(packs)}
         }]
     for i in range(0,max_years):
         year += 1;
@@ -91,7 +92,8 @@ def run_sim(max_years, max_population, packs=None):
             'packs':packs,
             'stats':{
                 'num_packs':len(packs),
-                'wolf_pop':wolf_population(packs)}
+                'wolf_pop':wolf_population(packs),
+                'mean_var':average_genetic_variance_total(packs)}
         })
 
     return time_data
@@ -101,7 +103,7 @@ def plot_time_stats(time_data):
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
-
+    mean_var =  [d['stats']['mean_var'] for d in time_data]
     plt.figure(1)
     plt.plot(years, num_packs, 'ro')
     plt.ylabel('num packs')
@@ -110,6 +112,11 @@ def plot_time_stats(time_data):
     plt.figure(2)
     plt.plot(years, wolf_pop, 'ro')
     plt.ylabel('wolf population')
+    plt.xlabel('years')
+
+    plt.figure(3)
+    plt.plot(years, mean_var, 'ro')
+    plt.ylabel('mean allele variation')
     plt.xlabel('years')
 
     plt.show()
@@ -150,6 +157,12 @@ def histogram_of_allele_total(packs):
     for p in packs:
         merge_histograms(histogram, p.histogram_of_allele())
     return histogram
+
+
+def average_genetic_variance_total(packs):
+    allele_variance = histogram_of_allele_variance_total(packs)
+    return statistics.mean(allele_variance.values())
+
 
 def merge_histograms(a, b):
     for k in a.keys():
