@@ -59,6 +59,10 @@ class Pack(object):
             non_mating_wolves[0].can_mate = True
             non_mating_wolves[1].can_mate = True
 
+    def average_genetic_variance(self):
+        allele_variance = self.histogram_of_allele_variance()
+        return statistics.mean(allele_variance.values())
+
     def histogram_of_allele_variance(self):
         alleles = self.histogram_of_allele()
         for k in alleles.keys():
