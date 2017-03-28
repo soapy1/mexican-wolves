@@ -2,11 +2,20 @@ from pack import Pack, generate_pack
 from random import normalvariate
 from math import ceil
 import matplotlib.pyplot as plt
+import statistics
 
 
 def main():
-    sim_100y_500p = run_sim(100, 100)
-    plot_time_stats(sim_100y_500p)
+    sim_100y_500p = run_sim(100, 500)
+    sim_100y_50p = run_sim(100, 100)
+    print('100 years, 500 max population, final pop')
+    print(histogram_of_allele_variance_total(sim_100y_500p[-1]['packs']))
+    print('100 years, 500 max population, first pop')
+    print(histogram_of_allele_variance_total(sim_100y_500p[0]['packs']))
+    print('100 years, 100 max population, final pop')
+    print(histogram_of_allele_variance_total(sim_100y_50p[-1]['packs']))
+    print('100 years, 100 max population, first pop')
+    print(histogram_of_allele_variance_total(sim_100y_50p[0]['packs']))
 
 
 def run_sim(max_years, max_population):
@@ -16,11 +25,11 @@ def run_sim(max_years, max_population):
     packs = [generate_pack(ceil(normalvariate(5,3))) for i in range(0,3)]
     time_data = [{
         'year':0,
+        'packs':packs,
         'stats':{
             'num_packs':len(packs),
             'wolf_pop':wolf_population(packs),
-            'avg_genetic_var':wolf_pop_genetic_variance(packs),
-            'avg_genetic_std_dev':wolf_pop_genetic_std_dev(packs)}
+            'avg_genetic_var':wolf_pop_genetic_variance(packs)}
         }]
     for i in range(0,max_years):
         year += 1;
@@ -37,17 +46,13 @@ def run_sim(max_years, max_population):
         packs = next_iter_packs
         time_data.append({
             'year':year,
+            'packs':packs,
             'stats':{
                 'num_packs':len(packs),
                 'wolf_pop':wolf_population(packs),
-                'avg_genetic_var':wolf_pop_genetic_variance(packs),
-                'avg_genetic_std_dev':wolf_pop_genetic_std_dev(packs)}
+                'avg_genetic_var':wolf_pop_genetic_variance(packs)}
         })
 
-    print("number packs: ", len(packs))
-    print("wolf population: ", wolf_population(packs))
-    print("average variance: ", wolf_pop_genetic_variance(packs))
-    print("average std dev: ", wolf_pop_genetic_std_dev(packs))
     return time_data
 
 
@@ -56,7 +61,6 @@ def plot_time_stats(time_data):
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
     avg_genetic_var = [d['stats']['avg_genetic_var'] for d in time_data]
-    avg_genetic_std_dev = [d['stats']['avg_genetic_std_dev'] for d in time_data]
 
     plt.figure(1)
     plt.plot(years, num_packs, 'ro')
@@ -72,11 +76,6 @@ def plot_time_stats(time_data):
     plt.plot(years, avg_genetic_var, 'ro')
     plt.ylabel('average genetic variance of packs')
     plt.xlabel('years')
-
-#    plt.figure(4)
-#    plt.plot(years, avg_genetic_std_dev, 'ro')
-#    plt.ylabel('average genetic standard deviation')
-#    plt.xlabel('years')
 
     plt.show()
 
@@ -104,6 +103,24 @@ def wolf_pop_genetic_std_dev(packs):
 def ages_lsp(p):
     alsp = [{'age': p.wolves[i].age, 'lsp': p.wolves[i].lifespan} for i in range(0,len(p.wolves))] 
     return alsp
+
+
+def histogram_of_allele_variance_total(packs):
+    histogram = histogram_of_allele_total(packs)
+    for k in histogram.keys():
+        histogram[k] = statistics.pvariance(histogram[k])
+    return histogram
+     
+
+def histogram_of_allele_total(packs):
+    histogram = {'a':[], 'b':[], 'c':[], 'd':[], 'e':[]}
+    for p in packs:
+        merge_histograms(histogram, p.histogram_of_allele())
+    return histogram
+
+def merge_histograms(a, b):
+    for k in a.keys():
+        a[k].extend(b[k])
 
 
 if __name__=='__main__':

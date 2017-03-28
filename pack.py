@@ -69,18 +69,24 @@ class Pack(object):
         return sum(self.wolves[i].genetic_std_dev() for i in range(0,num_wolves))/num_wolves
 
     def histogram_of_allele_variance(self):
-        alleles = {"a":0, "b":0, "c":0, "d":0, "e":0} 
+        alleles = self.histogram_of_allele()
+        for k in alleles.keys():
+            alleles[k] = statistics.pvariance(alleles[k])
+        return alleles
+
+    def histogram_of_allele(self):
+        alleles = {} 
         num_wolves = len(self.wolves)
-        alleles['a'] = statistics.pvariance(
-            [self.wolves[i].alleles[0].allele for i in range(0, num_wolves)])
-        alleles['b'] = statistics.pvariance(
-            [self.wolves[i].alleles[1].allele for i in range(0, num_wolves)])
-        alleles['c'] = statistics.pvariance(
-            [self.wolves[i].alleles[2].allele for i in range(0, num_wolves)])
-        alleles['d'] = statistics.pvariance(
-            [self.wolves[i].alleles[3].allele for i in range(0, num_wolves)])
-        alleles['e'] = statistics.pvariance(
-            [self.wolves[i].alleles[4].allele for i in range(0, num_wolves)])
+        alleles['a'] = [self.wolves[i].alleles[0].allele for i in 
+            range(0, num_wolves)]
+        alleles['b'] = [self.wolves[i].alleles[1].allele for i in
+            range(0, num_wolves)]
+        alleles['c'] = [self.wolves[i].alleles[2].allele for i in
+            range(0, num_wolves)]
+        alleles['d'] = [self.wolves[i].alleles[3].allele for i in 
+            range(0, num_wolves)]
+        alleles['e'] = [self.wolves[i].alleles[4].allele for i in 
+            range(0, num_wolves)]
         return alleles
 
 
