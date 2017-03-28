@@ -6,23 +6,54 @@ import statistics
 
 
 def main():
-    sim_100y_500p = run_sim(100, 500)
-    sim_100y_50p = run_sim(100, 100)
+    # Pack sizes for gray wolves range from about 2 to 8 members [4]
+    packs = [generate_pack(ceil(normalvariate(5,3))) for i in range(0,3)]
+
+    sim_100y_500p = run_sim(100, 500, packs.copy())
+    sim_100y_50p = run_sim(100, 50, packs.copy())
+    
     print('100 years, 500 max population, final pop')
     print(histogram_of_allele_variance_total(sim_100y_500p[-1]['packs']))
     print('100 years, 500 max population, first pop')
     print(histogram_of_allele_variance_total(sim_100y_500p[0]['packs']))
-    print('100 years, 100 max population, final pop')
+    print('100 years, 50 max population, final pop')
     print(histogram_of_allele_variance_total(sim_100y_50p[-1]['packs']))
-    print('100 years, 100 max population, first pop')
+    print('100 years, 500 max population, first pop')
     print(histogram_of_allele_variance_total(sim_100y_50p[0]['packs']))
+    
+    hist_100y_500p_last = histogram_of_allele_total(sim_100y_500p[-1]['packs'])
+    hist_100y_500p_first = histogram_of_allele_total(sim_100y_500p[0]['packs'])
+ 
+    hist_100y_50p_last = histogram_of_allele_total(sim_100y_50p[-1]['packs'])
+    hist_100y_50p_first = histogram_of_allele_total(sim_100y_50p[0]['packs'])
+    
+    fig = plt.figure(1)
+    fig.suptitle('Histogram of genetic variation in gene "a" for max population 500 over 100 years')
+    ax = plt.subplot(211)
+    ax.hist(hist_100y_500p_first['a'])
+    ax.set_title('first generation')
+    ax = plt.subplot(212)
+    ax.hist(hist_100y_500p_last['a'])
+    ax.set_title('last generation')
+    
+    fig = plt.figure(2)
+    fig.suptitle('Histogram of genetic variation in gene "a" for max population 50 over 100 years')
+    ax = plt.subplot(211)
+    ax.hist(hist_100y_50p_first['a'])
+    ax.set_title('first generation')
+    ax = plt.subplot(212)
+    ax.hist(hist_100y_50p_last['a'])
+    ax.set_title('last generation')
+ 
+    plt.show()
 
 
-def run_sim(max_years, max_population):
+def run_sim(max_years, max_population, packs=None):
     # start simulation at year 0
     year = 0
-    # Pack sizes for gray wolves range from about 2 to 8 members [4]
-    packs = [generate_pack(ceil(normalvariate(5,3))) for i in range(0,3)]
+    if packs is None:
+        # Pack sizes for gray wolves range from about 2 to 8 members [4]
+        packs = [generate_pack(ceil(normalvariate(5,3))) for i in range(0,3)]
     time_data = [{
         'year':0,
         'packs':packs,
@@ -83,8 +114,6 @@ def plot_time_stats(time_data):
 def split_pack(p):
     len_new_pack = ceil(len(p.wolves)/2)
     new_packs = [Pack(p.wolves[0:len_new_pack]), Pack(p.wolves[len_new_pack:len(p.wolves)])]
-    for np in new_packs:
-        np.ensure_two_mating_wolves()
     return new_packs
 
 

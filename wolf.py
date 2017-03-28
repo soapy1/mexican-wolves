@@ -1,6 +1,6 @@
-from allele import Allele
 from math import pow, floor, sqrt
 from random import randrange, normalvariate
+import statistics
 
 class Wolf(object):
     def __init__(self, alleles, can_mate=False):
@@ -15,18 +15,13 @@ class Wolf(object):
 
     # Note: max variance is 2
     def genetic_variance(self):
-        num_alleles = len(self.alleles)
-        mean = sum(self.alleles[i].allele for i in 
-            range(0, num_alleles))/num_alleles
-        var = sum(pow(self.alleles[i].allele-mean,2) for i in
-            range(0, num_alleles))/num_alleles
-        return var
+        return statistics.pvariance(self.alleles.values())
 
 
     def genetic_std_dev(self):
         return sqrt(self.genetic_variance())
  
 def generate_random_wolf(can_mate=False):
-    alleles = [Allele(randrange(1,5)) for i in range(0,5)]
+    alleles = {'a':randrange(1,5), 'b':randrange(1,5), 'c':randrange(1,5), 'd':randrange(1,5), 'e':randrange(1,5)}
     return Wolf(alleles, can_mate)
 

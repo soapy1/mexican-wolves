@@ -1,5 +1,4 @@
 from wolf import Wolf, generate_random_wolf
-from allele import Allele
 from random import normalvariate, randrange
 from math import floor
 import statistics
@@ -25,13 +24,14 @@ class Pack(object):
             self.wolves.extend(Wolf(self.determine_pup_alleles()) for i in range(0,num_pups))
 
     def determine_pup_alleles(self):
+        self.ensure_two_mating_wolves()
         mating_wolves = [w for w in self.wolves if w.can_mate==True]
-        pup_alleles = []
+        pup_alleles = {}
         assert len(mating_wolves) == 2
         assert len(mating_wolves[0].alleles) == len(mating_wolves[1].alleles)
-        for i in range(0,len(mating_wolves[0].alleles)):
-            pup_alleles.append(mating_wolves[0].alleles[i] if \
-                randrange(0,2)==0 else mating_wolves[1].alleles[i])
+        for k in mating_wolves[0].alleles.keys():
+            pup_alleles[k] = (mating_wolves[0].alleles[k] if \
+                randrange(0,2)==0 else mating_wolves[1].alleles[k])
         return pup_alleles
 
     # Accounting for death by old age, lack or resources, killed by
@@ -44,7 +44,6 @@ class Pack(object):
                 wolves_to_die.append(w)  
         for d in wolves_to_die:
             self.wolves.remove(d)
-        self.ensure_two_mating_wolves()
 
     def ensure_two_mating_wolves(self):
         if len(self.wolves) < 2:
@@ -77,16 +76,8 @@ class Pack(object):
     def histogram_of_allele(self):
         alleles = {} 
         num_wolves = len(self.wolves)
-        alleles['a'] = [self.wolves[i].alleles[0].allele for i in 
-            range(0, num_wolves)]
-        alleles['b'] = [self.wolves[i].alleles[1].allele for i in
-            range(0, num_wolves)]
-        alleles['c'] = [self.wolves[i].alleles[2].allele for i in
-            range(0, num_wolves)]
-        alleles['d'] = [self.wolves[i].alleles[3].allele for i in 
-            range(0, num_wolves)]
-        alleles['e'] = [self.wolves[i].alleles[4].allele for i in 
-            range(0, num_wolves)]
+        for k in ['a','b','c','d','e']:
+            alleles[k] = [self.wolves[i].alleles[k] for i in range(0,num_wolves)]
         return alleles
 
 
