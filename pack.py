@@ -59,16 +59,6 @@ class Pack(object):
             non_mating_wolves[0].can_mate = True
             non_mating_wolves[1].can_mate = True
 
-    def average_genetic_variance(self):
-        num_wolves = len(self.wolves)
-        if num_wolves == 0:
-            import pdb; pdb.set_trace()
-        return sum(self.wolves[i].genetic_variance() for i in range(0,num_wolves))/num_wolves
-
-    def average_genetic_std_dev(self):
-        num_wolves = len(self.wolves)
-        return sum(self.wolves[i].genetic_std_dev() for i in range(0,num_wolves))/num_wolves
-
     def histogram_of_allele_variance(self):
         alleles = self.histogram_of_allele()
         for k in alleles.keys():

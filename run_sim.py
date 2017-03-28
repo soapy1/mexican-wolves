@@ -71,8 +71,7 @@ def run_sim(max_years, max_population, packs=None):
         'packs':packs,
         'stats':{
             'num_packs':len(packs),
-            'wolf_pop':wolf_population(packs),
-            'avg_genetic_var':wolf_pop_genetic_variance(packs)}
+            'wolf_pop':wolf_population(packs)}
         }]
     for i in range(0,max_years):
         year += 1;
@@ -92,8 +91,7 @@ def run_sim(max_years, max_population, packs=None):
             'packs':packs,
             'stats':{
                 'num_packs':len(packs),
-                'wolf_pop':wolf_population(packs),
-                'avg_genetic_var':wolf_pop_genetic_variance(packs)}
+                'wolf_pop':wolf_population(packs)}
         })
 
     return time_data
@@ -103,7 +101,6 @@ def plot_time_stats(time_data):
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
-    avg_genetic_var = [d['stats']['avg_genetic_var'] for d in time_data]
 
     plt.figure(1)
     plt.plot(years, num_packs, 'ro')
@@ -113,11 +110,6 @@ def plot_time_stats(time_data):
     plt.figure(2)
     plt.plot(years, wolf_pop, 'ro')
     plt.ylabel('wolf population')
-    plt.xlabel('years')
-
-    plt.figure(3)
-    plt.plot(years, avg_genetic_var, 'ro')
-    plt.ylabel('average genetic variance of packs')
     plt.xlabel('years')
 
     plt.show()

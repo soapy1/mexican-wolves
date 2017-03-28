@@ -13,13 +13,6 @@ class Wolf(object):
         self.lifespan = floor(normalvariate(7, 1)) 
         self.can_mate = can_mate
 
-    # Note: max variance is 2
-    def genetic_variance(self):
-        return statistics.pvariance(self.alleles.values())
-
-
-    def genetic_std_dev(self):
-        return sqrt(self.genetic_variance())
  
 def generate_random_wolf(can_mate=False):
     # Wolf alleles range from 1 to 5
