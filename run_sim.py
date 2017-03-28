@@ -21,44 +21,37 @@ def main():
     print('100 years, 500 max population, first pop')
     print(histogram_of_allele_variance_total(sim_100y_50p[0]['packs']))
     
-    hist_100y_500p_last = histogram_of_allele_total(sim_100y_500p[-1]['packs'])
-    hist_100y_500p_first = histogram_of_allele_total(sim_100y_500p[0]['packs'])
+    hist_100y_500p_last = histogram_of_loci_total(sim_100y_500p[-1]['packs'])
+    hist_100y_500p_first = histogram_of_loci_total(sim_100y_500p[0]['packs'])
  
-    hist_100y_50p_last = histogram_of_allele_total(sim_100y_50p[-1]['packs'])
-    hist_100y_50p_first = histogram_of_allele_total(sim_100y_50p[0]['packs'])
+    hist_100y_50p_last = histogram_of_loci_total(sim_100y_50p[-1]['packs'])
+    hist_100y_50p_first = histogram_of_loci_total(sim_100y_50p[0]['packs'])
+   
+    plot_histogram(1,
+        'Histogram of allele variation in locus "a" for max population 500 over 100 years', 
+        hist_100y_500p_first, hist_100y_500p_last)
+    plot_histogram(2,
+        'Histogram of allele variation in locus "a" for max population 50 over 100 years',
+        hist_100y_50p_first, hist_100y_50p_last)
     
-    fig1 = plt.figure(1)
-    fig1.suptitle('Histogram of genetic variation in gene "a" for max population 500 over 100 years')
+    plt.show()
+
+def plot_histogram(n, title, hist_first, hist_last):
+    fig1 = plt.figure(n)
+    fig1.suptitle(title)
     ax = fig1.add_subplot(211)
-    ax.hist(hist_100y_500p_first['a'])
+    ax.hist(hist_first['a'])
     ax.set_title('first generation')
     ax.set_xlabel('allele')
     ax.set_ylabel('number of wolves')
     ax.set_xlim([0,5])
     ax = fig1.add_subplot(212)
-    ax.hist(hist_100y_500p_last['a'])
+    ax.hist(hist_last['a'])
     ax.set_title('last generation')
     ax.set_xlabel('allele')
     ax.set_ylabel('number of wolves')
     ax.set_xlim([0,5])
    
-    fig2 = plt.figure(2)
-    fig2.suptitle('Histogram of genetic variation in gene "a" for max population 50 over 100 years')
-    ax = fig2.add_subplot(211)
-    ax.hist(hist_100y_50p_first['a'])
-    ax.set_title('first generation')
-    ax.set_xlabel('allele')
-    ax.set_ylabel('number of wolves')
-    ax.set_xlim([0,5])
-    ax = fig2.add_subplot(212)
-    ax.hist(hist_100y_50p_last['a'])
-    ax.set_title('last generation')
-    ax.set_xlabel('allele')
-    ax.set_ylabel('number of wolves')
-    ax.set_xlim([0,5])
- 
-    plt.show()
-
 
 def run_sim(max_years, max_population, packs=None):
     # start simulation at year 0
@@ -99,7 +92,7 @@ def run_sim(max_years, max_population, packs=None):
     return time_data
 
 
-def plot_time_stats(time_data):
+def plot_time_stats(time_data, plot=False):
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
@@ -118,8 +111,9 @@ def plot_time_stats(time_data):
     plt.plot(years, mean_var, 'ro')
     plt.ylabel('mean allele variation')
     plt.xlabel('years')
-
-    plt.show()
+    
+    if plot:
+        plt.show()
 
 
 def split_pack(p):
@@ -146,16 +140,16 @@ def ages_lsp(p):
 
 
 def histogram_of_allele_variance_total(packs):
-    histogram = histogram_of_allele_total(packs)
+    histogram = histogram_of_loci_total(packs)
     for k in histogram.keys():
         histogram[k] = statistics.pvariance(histogram[k])
     return histogram
      
 
-def histogram_of_allele_total(packs):
+def histogram_of_loci_total(packs):
     histogram = {'a':[], 'b':[], 'c':[], 'd':[], 'e':[], 'f':[]}
     for p in packs:
-        merge_histograms(histogram, p.histogram_of_allele())
+        merge_histograms(histogram, p.histogram_of_loci())
     return histogram
 
 

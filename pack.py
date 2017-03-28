@@ -26,13 +26,13 @@ class Pack(object):
     def determine_pup_alleles(self):
         self.ensure_two_mating_wolves()
         mating_wolves = [w for w in self.wolves if w.can_mate==True]
-        pup_alleles = {}
+        pup_loci = {}
         assert len(mating_wolves) == 2
-        assert len(mating_wolves[0].alleles) == len(mating_wolves[1].alleles)
-        for k in mating_wolves[0].alleles.keys():
-            pup_alleles[k] = (mating_wolves[0].alleles[k] if \
-                randrange(0,2)==0 else mating_wolves[1].alleles[k])
-        return pup_alleles
+        assert len(mating_wolves[0].loci) == len(mating_wolves[1].loci)
+        for k in mating_wolves[0].loci.keys():
+            pup_loci[k] = (mating_wolves[0].loci[k] if \
+                randrange(0,2)==0 else mating_wolves[1].loci[k])
+        return pup_loci
 
     # Accounting for death by old age, lack or resources, killed by
     # other animal, etc. This is all encapsulated by the life span of
@@ -64,17 +64,17 @@ class Pack(object):
         return statistics.mean(allele_variance.values())
 
     def histogram_of_allele_variance(self):
-        alleles = self.histogram_of_allele()
-        for k in alleles.keys():
-            alleles[k] = statistics.pvariance(alleles[k])
-        return alleles
+        allele_vars = self.histogram_of_loci()
+        for k in allele_vars.keys():
+            allele_vars[k] = statistics.pvariance(allele_vars[k])
+        return allele_vars
 
-    def histogram_of_allele(self):
-        alleles = {} 
+    def histogram_of_loci(self):
+        loci = {} 
         num_wolves = len(self.wolves)
         for k in ['a','b','c','d','e','f']:
-            alleles[k] = [self.wolves[i].alleles[k] for i in range(0,num_wolves)]
-        return alleles
+            loci[k] = [self.wolves[i].loci[k] for i in range(0,num_wolves)]
+        return loci
 
 
 def generate_pack(num_wolves):
