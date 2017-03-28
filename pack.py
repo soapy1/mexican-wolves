@@ -61,6 +61,8 @@ class Pack(object):
 
     def average_genetic_variance(self):
         num_wolves = len(self.wolves)
+        if num_wolves == 0:
+            import pdb; pdb.set_trace()
         return sum(self.wolves[i].genetic_variance() for i in range(0,num_wolves))/num_wolves
 
     def average_genetic_std_dev(self):
@@ -76,7 +78,7 @@ class Pack(object):
     def histogram_of_allele(self):
         alleles = {} 
         num_wolves = len(self.wolves)
-        for k in ['a','b','c','d','e']:
+        for k in ['a','b','c','d','e','f']:
             alleles[k] = [self.wolves[i].alleles[k] for i in range(0,num_wolves)]
         return alleles
 

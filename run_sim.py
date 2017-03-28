@@ -27,23 +27,35 @@ def main():
     hist_100y_50p_last = histogram_of_allele_total(sim_100y_50p[-1]['packs'])
     hist_100y_50p_first = histogram_of_allele_total(sim_100y_50p[0]['packs'])
     
-    fig = plt.figure(1)
-    fig.suptitle('Histogram of genetic variation in gene "a" for max population 500 over 100 years')
-    ax = plt.subplot(211)
+    fig1 = plt.figure(1)
+    fig1.suptitle('Histogram of genetic variation in gene "a" for max population 500 over 100 years')
+    ax = fig1.add_subplot(211)
     ax.hist(hist_100y_500p_first['a'])
     ax.set_title('first generation')
-    ax = plt.subplot(212)
+    ax.set_xlabel('allele')
+    ax.set_ylabel('number of wolves')
+    ax.set_xlim([0,5])
+    ax = fig1.add_subplot(212)
     ax.hist(hist_100y_500p_last['a'])
     ax.set_title('last generation')
-    
-    fig = plt.figure(2)
-    fig.suptitle('Histogram of genetic variation in gene "a" for max population 50 over 100 years')
-    ax = plt.subplot(211)
+    ax.set_xlabel('allele')
+    ax.set_ylabel('number of wolves')
+    ax.set_xlim([0,5])
+   
+    fig2 = plt.figure(2)
+    fig2.suptitle('Histogram of genetic variation in gene "a" for max population 50 over 100 years')
+    ax = fig2.add_subplot(211)
     ax.hist(hist_100y_50p_first['a'])
     ax.set_title('first generation')
-    ax = plt.subplot(212)
+    ax.set_xlabel('allele')
+    ax.set_ylabel('number of wolves')
+    ax.set_xlim([0,5])
+    ax = fig2.add_subplot(212)
     ax.hist(hist_100y_50p_last['a'])
     ax.set_title('last generation')
+    ax.set_xlabel('allele')
+    ax.set_ylabel('number of wolves')
+    ax.set_xlim([0,5])
  
     plt.show()
 
@@ -142,7 +154,7 @@ def histogram_of_allele_variance_total(packs):
      
 
 def histogram_of_allele_total(packs):
-    histogram = {'a':[], 'b':[], 'c':[], 'd':[], 'e':[]}
+    histogram = {'a':[], 'b':[], 'c':[], 'd':[], 'e':[], 'f':[]}
     for p in packs:
         merge_histograms(histogram, p.histogram_of_allele())
     return histogram

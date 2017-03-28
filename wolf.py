@@ -4,8 +4,8 @@ import statistics
 
 class Wolf(object):
     def __init__(self, alleles, can_mate=False):
-        # A wolf should have 5 alleles [1]
-        if len(alleles) > 5:
+        # A wolf should have 6 alleles [1]
+        if len(alleles) > 6:
             raise ValueError("Too many alleles specified")
         self.alleles = alleles
         self.age = 0
@@ -22,6 +22,7 @@ class Wolf(object):
         return sqrt(self.genetic_variance())
  
 def generate_random_wolf(can_mate=False):
-    alleles = {'a':randrange(1,5), 'b':randrange(1,5), 'c':randrange(1,5), 'd':randrange(1,5), 'e':randrange(1,5)}
+    # Wolf alleles range from 1 to 5
+    alleles = {'a':randrange(1,6), 'b':randrange(1,6), 'c':randrange(1,6), 'd':randrange(1,6), 'e':randrange(1,6), 'f':randrange(1,6)}
     return Wolf(alleles, can_mate)
 
