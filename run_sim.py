@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    run_sim(100, 500)
+    sim_100y_500p = run_sim(100, 100)
+    plot_time_stats(sim_100y_500p)
 
 
 def run_sim(max_years, max_population):
@@ -47,6 +48,10 @@ def run_sim(max_years, max_population):
     print("wolf population: ", wolf_population(packs))
     print("average variance: ", wolf_pop_genetic_variance(packs))
     print("average std dev: ", wolf_pop_genetic_std_dev(packs))
+    return time_data
+
+
+def plot_time_stats(time_data):
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
@@ -65,7 +70,7 @@ def run_sim(max_years, max_population):
 
     plt.figure(3)
     plt.plot(years, avg_genetic_var, 'ro')
-    plt.ylabel('average genetic variation')
+    plt.ylabel('average genetic variance of packs')
     plt.xlabel('years')
 
 #    plt.figure(4)
@@ -74,8 +79,7 @@ def run_sim(max_years, max_population):
 #    plt.xlabel('years')
 
     plt.show()
-    return time_data
-    
+
 
 def split_pack(p):
     len_new_pack = ceil(len(p.wolves)/2)
