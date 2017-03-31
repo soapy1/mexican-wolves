@@ -11,30 +11,29 @@ def main():
 
     sim_100y_500p = run_sim(100, 500, packs.copy())
     sim_100y_50p = run_sim(100, 50, packs.copy())
-    
+
+    print('first pop')
+    print(histogram_of_allele_variance_total(packs))    
     print('100 years, 500 max population, final pop')
     print(histogram_of_allele_variance_total(sim_100y_500p[-1]['packs']))
-    print('100 years, 500 max population, first pop')
-    print(histogram_of_allele_variance_total(sim_100y_500p[0]['packs']))
     print('100 years, 50 max population, final pop')
     print(histogram_of_allele_variance_total(sim_100y_50p[-1]['packs']))
-    print('100 years, 500 max population, first pop')
-    print(histogram_of_allele_variance_total(sim_100y_50p[0]['packs']))
-    
+ 
     hist_100y_500p_last = histogram_of_loci_total(sim_100y_500p[-1]['packs'])
     hist_100y_500p_first = histogram_of_loci_total(sim_100y_500p[0]['packs'])
  
     hist_100y_50p_last = histogram_of_loci_total(sim_100y_50p[-1]['packs'])
     hist_100y_50p_first = histogram_of_loci_total(sim_100y_50p[0]['packs'])
    
-    plot_histogram(1,
-        'Histogram of allele variation in locus "a" for max population 500 over 100 years', 
-        hist_100y_500p_first, hist_100y_500p_last)
-    plot_histogram(2,
-        'Histogram of allele variation in locus "a" for max population 50 over 100 years',
-        hist_100y_50p_first, hist_100y_50p_last)
+    plot_histogram(1,'Histogram of allele variation in locus "a" for max population 500 over 100 years', hist_100y_500p_first, hist_100y_500p_last)
+    plot_histogram(2,'Histogram of allele variation in locus "a" for max population 50 over 100 years',hist_100y_50p_first, hist_100y_50p_last)
+    
+    plot_time_stats(sim_100y_50p, "max population 50, 100 years", 3)
+    plot_time_stats(sim_100y_500p, "max population 500, 100 years", 6)
     
     plt.show()
+    import pdb; pdb.set_trace()
+
 
 def plot_histogram(n, title, hist_first, hist_last):
     fig1 = plt.figure(n)
@@ -92,23 +91,26 @@ def run_sim(max_years, max_population, packs=None):
     return time_data
 
 
-def plot_time_stats(time_data, plot=False):
+def plot_time_stats(time_data, title, n=1, plot=False):
     years = [d['year'] for d in time_data]
     num_packs = [d['stats']['num_packs'] for d in time_data]
     wolf_pop = [d['stats']['wolf_pop'] for d in time_data]
     mean_var =  [d['stats']['mean_var'] for d in time_data]
-    plt.figure(1)
+    plt.figure(n)
     plt.plot(years, num_packs, 'ro')
+    plt.title(title)
     plt.ylabel('num packs')
     plt.xlabel('years')
 
-    plt.figure(2)
+    plt.figure(n+1)
     plt.plot(years, wolf_pop, 'ro')
+    plt.title(title)
     plt.ylabel('wolf population')
     plt.xlabel('years')
 
-    plt.figure(3)
+    plt.figure(n+2)
     plt.plot(years, mean_var, 'ro')
+    plt.title(title)
     plt.ylabel('mean allele variation')
     plt.xlabel('years')
     
