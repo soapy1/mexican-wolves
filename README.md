@@ -12,8 +12,12 @@ Only the alpha male and beta female of a pack mate, so one pack will only have o
 
 ## References
 [1] http://www.tandfonline.com/doi/pdf/10.1080/09712119.2007.9706647
+
 [2] http://rspb.royalsocietypublishing.org/content/royprsb/274/1623/2365.full.pdf 
+
 [3] http://onlinelibrary.wiley.com/doi/10.1111/j.1469-1795.2007.00116.x/full
+
 [4] http://www.wolf.org/wolf-info/basic-wolf-info/wolf-faqs/#g
+
 [5] http://www.biologicaldiversity.org/species/mammals/Mexican_gray_wolf/natural_history.html
 
