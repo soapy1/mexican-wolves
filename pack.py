@@ -17,18 +17,15 @@ class Pack(object):
     # of a parents may have a litter size as small as 3.40 - 6.71  on average
     def mate(self):
         if len(self.wolves) >= 2:
-            if self.average_genetic_variance() > 1.5:            
+            if self.average_genetic_variance() > 1.5:
                 num_pups = floor(normalvariate(7.45, 2))
             else:
                 num_pups = floor(normalvariate(3.40, 2))
             self.wolves.extend(Wolf(self.determine_pup_alleles()) for i in range(0,num_pups))
 
     def determine_pup_alleles(self):
-        self.ensure_two_mating_wolves()
         mating_wolves = [w for w in self.wolves if w.can_mate==True]
         pup_loci = {}
-        assert len(mating_wolves) == 2
-        assert len(mating_wolves[0].loci) == len(mating_wolves[1].loci)
         for k in mating_wolves[0].loci.keys():
             pup_loci[k] = (mating_wolves[0].loci[k] if \
                 randrange(0,2)==0 else mating_wolves[1].loci[k])
@@ -41,7 +38,7 @@ class Pack(object):
         wolves_to_die = []
         for w in self.wolves:
             if w.age >= w.lifespan:
-                wolves_to_die.append(w)  
+                wolves_to_die.append(w)
         for d in wolves_to_die:
             self.wolves.remove(d)
 
@@ -70,7 +67,7 @@ class Pack(object):
         return allele_vars
 
     def histogram_of_loci(self):
-        loci = {} 
+        loci = {}
         num_wolves = len(self.wolves)
         for k in ['a','b','c','d','e','f']:
             loci[k] = [self.wolves[i].loci[k] for i in range(0,num_wolves)]
